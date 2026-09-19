@@ -32,7 +32,24 @@ void emOrdem(Nob* raiz) {
         emOrdem(raiz->direita);
     }
 }
-int econtraChave(Nob* raiz, int valor) {
+int contaChaves(Nob* raiz) {
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    int count = raiz->qtdChaves;
+    
+    Nod *aux = raiz->listaChaves->ini;
+    while(aux != NULL) {
+        count += contaChaves(get_filho(aux));
+        aux = aux->prox;
+    }
+
+    count += contaChaves(raiz->direita);
+
+    return count;
+}
+Chave* econtraChave(Nob* raiz, int valor) {
     if(raiz == NULL) {
         return 0;
     } 
@@ -50,6 +67,28 @@ int econtraChave(Nob* raiz, int valor) {
     }
 
     return encontraChave(get_filho(aux), valor);
+}
+
+int alturaArvore(Nob* raiz) {
+    if(raiz == NULL) {
+        return 0;
+    }
+
+    int altura = 0;
+    Nod *aux = raiz->listaChaves->ini;
+    while(aux != NULL) {
+        int alturaFilho = alturaArvore(get_filho(aux));
+        if(alturaFilho > altura) {
+            altura = alturaFilho;
+        }
+        aux = aux->prox;
+
+    }
+    int alturaDireita = alturaArvore(raiz->direita);
+    if(alturaDireita > altura) {
+        altura = alturaDireita;
+    }
+    return altura + 1;
 }
 
 void mostraMedia(Nob* raiz) {
